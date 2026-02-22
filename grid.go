@@ -1,0 +1,65 @@
+package main
+
+type Grid struct {
+	cellSize  int
+	cols      int
+	rows      int
+	gridCells [][]int // indisleri tutmak icin
+}
+
+func NewGrid(width int, height int, gridcellSize int) *Grid {
+	// be careful that cellsize being an integer
+
+	cols := width / gridcellSize
+	rows := height / gridcellSize
+
+	gridCells := make([][]int, cols*rows)
+
+	return &Grid{
+		cellSize:  gridcellSize,
+		cols:      cols,
+		rows:      rows,
+		gridCells: gridCells,
+	}
+
+}
+
+func (g *Grid) gridCellIndex(x, y float32) int {
+
+	var col int = int(x) / g.cellSize
+	var row int = int(y) / g.cellSize
+
+	if col < 0 {
+		col = 0
+	}
+	if row < 0 {
+		row = 0
+	}
+	if col > g.cols {
+		col = g.cols - 1
+	}
+	if row > g.rows {
+		row = g.rows - 1
+	}
+
+	return row*g.cols + col
+
+}
+
+func (g *Grid) clear() {
+	for i := range g.gridCells {
+		g.gridCells[i] = g.gridCells[i][:0] // instead of setting the array from scratch, just zeroing it
+	}
+
+}
+
+func (g *Grid) insertCellsToGrid(cells []Cell) {
+
+	// finding the cells index
+	// then appending it to the gridCell[idx] array - agents idx are stored there
+
+	for i := range cells {
+		idx := g.gridCellIndex(cells[i].pos.X, cells[i].pos.Y)
+		g.gridCells[idx] = append(g.gridCells[idx], i)
+	}
+}
