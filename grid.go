@@ -63,3 +63,35 @@ func (g *Grid) insertCellsToGrid(cells []Cell) {
 		g.gridCells[idx] = append(g.gridCells[idx], i)
 	}
 }
+
+func (g *Grid) findNeighbors(cellIdx int, cells []Cell) []int {
+	// to make a real cell like structers, i need to find a way to attract them together
+	// 1D slice makes thing a little harder to understand sometimes
+	// nrow*g.cols + ncol => shit ass technique
+	cell := cells[cellIdx]
+
+	var col int = int(cell.pos.X) / g.cellSize
+	var row int = int(cell.pos.Y) / g.cellSize
+
+	var neighborsCount []int
+
+	for dy := -1; dy <= 1; dy++ {
+		for dx := -1; dx <= 1; dx++ {
+			// n = neighbor
+			ncol := col + dx
+			nrow := row + dy
+
+			if ncol < 0 || nrow < 0 || ncol >= g.cols || nrow >= g.rows {
+				neighborsCount = append(neighborsCount, 0)
+				continue
+			}
+			// ncIdx is the index of the neighbor cell in the gridCells
+			var ncIdx int = nrow*g.cols + ncol
+			neighborsCount = append(neighborsCount, len(g.gridCells[ncIdx]))
+
+		}
+	}
+
+	return neighborsCount
+
+}
