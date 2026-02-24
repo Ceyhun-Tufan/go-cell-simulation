@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
@@ -11,10 +9,10 @@ import (
 const SCREEN_HEIGHT int32 = 600
 const SCREEN_WIDTH int32 = 800
 
-const CELL_COUNT int = 100
-const GRIDCELL_SIZE int = 40
+const CELL_COUNT int = 2000
+const GRIDCELL_SIZE int = 20
 
-const MAX_CELL_SPEED float32 = 5
+const MAX_CELL_SPEED float32 = 1
 
 var pause bool = false
 
@@ -61,9 +59,9 @@ func main() {
 
 		for i := range cells {
 			tmp := cells[i]
-			cells[i].MoveTowardsAttraction(rl.Vector2{X: 5, Y: 5}) // need to normalize movement
+			cells[i].findTheAttractionVector(grid.findNeighbors(i, cells))
+			cells[i].moveTowardsAttraction() // need to normalize movement later on
 			rl.DrawCircleV(tmp.pos, tmp.radius, tmp.color)
-			fmt.Printf("grid.findNeighbors(cells[i]): %v\n", grid.findNeighbors(i, cells))
 		}
 
 		rl.EndDrawing()
@@ -71,7 +69,10 @@ func main() {
 }
 
 func initCells() {
-	for range CELL_COUNT {
+	for range CELL_COUNT / 2 {
 		cells = append(cells, NewBlueCell())
+	}
+	for range CELL_COUNT / 2 {
+		cells = append(cells, NewRedCell())
 	}
 }

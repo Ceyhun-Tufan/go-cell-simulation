@@ -65,8 +65,6 @@ func (g *Grid) insertCellsToGrid(cells []Cell) {
 }
 
 func (g *Grid) findNeighbors(cellIdx int, cells []Cell) []int {
-	// to make a real cell like structers, i need to find a way to attract them together
-	// 1D slice makes thing a little harder to understand sometimes
 	// nrow*g.cols + ncol => shit ass technique
 	cell := cells[cellIdx]
 
